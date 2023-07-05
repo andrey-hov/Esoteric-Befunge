@@ -125,6 +125,20 @@ class Interpreter:
             elif e == '.':
                 a = pointer.stack.pop()
                 result += str(a)
+            elif e == '$':
+                pointer.stack.pop()
+            elif e == '!':
+                if pointer.stack.pop() == 0:
+                    pointer.stack.append(1)
+                else:
+                    pointer.stack.append(0)
+            elif e == '`':
+                a = pointer.stack.pop()
+                b = pointer.stack.pop()
+                if b > a:
+                    pointer.stack.append(1)
+                else:
+                    pointer.stack.append(0)
             elif e == '\"':
                 pointer.step()
                 e = pointer.get()
@@ -135,4 +149,6 @@ class Interpreter:
             elif e == '@':
                 break
             pointer.step()
+            if e == '#':
+                pointer.step()
         return result
