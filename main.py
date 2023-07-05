@@ -1,6 +1,11 @@
+import sys
+
 import Befunge
 
 
 if __name__ == '__main__':
-    print(Befunge.Interpreter('Hello_world.txt').start())
-    print(Befunge.Interpreter('Fibonachi.txt').start())
+    for i in sys.stdin:
+        if str(i).rstrip('\n') == 'Exit':
+            print('Done')
+            break
+        print(Befunge.Interpreter(str(i).rstrip('\n')).start())
