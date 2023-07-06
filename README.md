@@ -15,8 +15,9 @@
 
 ## Программы
 
-1. Fibonachi.txt - Выводит первые 14 чисел Фибоначчи
-2. Hello_world.txt - печатает 'Hello World!'
-3. random.txt - выводит рандомные числа 
+1. `programs/Fibonachi.txt` - Выводит первые 14 чисел Фибоначчи
+2. `programs/Hello_world.txt` - печатает 'Hello World!'
+3. `programs/random.txt` - выводит рандомные числа
+4. `programs/input.txt` - выводит введенное число
 
 ## Автор: Ховрычев Андрей

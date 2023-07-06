@@ -8,6 +8,9 @@ class MyTestCase(unittest.TestCase):
     def test_HelloWorld(self):
         self.assertEqual(main.Interpreter('Hello_world.txt').start(), 'Hello World!')
 
+    def test_input_and_print(self):
+        self.assertEqual(main.Interpreter('input.txt').start(), 'Hello World!')
+
 
 if __name__ == '__main__':
     unittest.main()

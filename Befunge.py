@@ -52,6 +52,11 @@ class Pointer:
 
 
 class Interpreter:
+    """
+    Интерпретатор
+    Принимает путь до файла и выполняет его.
+    """
+
     def __init__(self, file_name):
         self.pointer = Pointer(file_name)
 
@@ -124,7 +129,7 @@ class Interpreter:
                 p.stack.append(a)
                 p.stack.append(a)
             elif e == ',':
-                a = chr(p.stack.pop())
+                a = p.stack.pop().decode('ASCII')
                 result += a
             elif e == '.':
                 a = p.stack.pop()
@@ -132,7 +137,11 @@ class Interpreter:
             elif e == '$':
                 p.stack.pop()
             elif e == '&':
-                p.stack.append(int(input('Введите число: ')))
+                a = input('Введите число: ')
+                if a.isdigit():
+                    p.stack.append(int(input('Введите число: ')))
+                else:
+                    raise Exception('Это не число')
             elif e == '#':
                 p.step()
             elif e == '~':
