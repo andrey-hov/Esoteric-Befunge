@@ -57,46 +57,46 @@ class Interpreter:
 
     def start(self):
         result = ''
-        pointer = self.pointer
+        p = self.pointer
         while True:
-            e = pointer.get()
+            e = p.get()
             if e == '>':
-                pointer.vector = '>'
+                p.vector = '>'
             elif e == '<':
-                pointer.vector = '<'
+                p.vector = '<'
             elif e == '^':
-                pointer.vector = '^'
+                p.vector = '^'
             elif e == 'v':
-                pointer.vector = 'v'
+                p.vector = 'v'
             elif e.isdigit():
-                pointer.stack.append(int(e))
+                p.stack.append(int(e))
             elif e == 'p':
-                x = pointer.stack.pop()
-                y = pointer.stack.pop()
-                value = pointer.stack.pop()
-                pointer.A[x][y] = chr(value)
+                x = p.stack.pop()
+                y = p.stack.pop()
+                value = p.stack.pop()
+                p.A[x][y] = chr(value)
             elif e == 'g':
-                x = pointer.stack.pop()
-                y = pointer.stack.pop()
-                value = pointer.A[x][y]
-                pointer.stack.append(ord(value))
+                x = p.stack.pop()
+                y = p.stack.pop()
+                value = p.A[x][y]
+                p.stack.append(ord(value))
             elif e == '|':
-                flag = pointer.stack.pop()
+                flag = p.stack.pop()
                 if flag == 0:
-                    pointer.vector = 'v'
+                    p.vector = 'v'
                 else:
-                    pointer.vector = '^'
+                    p.vector = '^'
             elif e == '_':
-                flag = pointer.stack.pop()
+                flag = p.stack.pop()
                 if flag == 0:
-                    pointer.vector = '>'
+                    p.vector = '>'
                 else:
-                    pointer.vector = '<'
+                    p.vector = '<'
             elif e == '?':
-                pointer.vector = random.choice(['^', 'v', '>', '<'])
+                p.vector = random.choice(['^', 'v', '>', '<'])
             elif e in ['+', '-', '*', '/', '%']:
-                b = pointer.stack.pop()
-                a = pointer.stack.pop()
+                b = p.stack.pop()
+                a = p.stack.pop()
                 if e == '+':
                     res = a + b
                 elif e == '-':
@@ -110,46 +110,53 @@ class Interpreter:
                         res = a // b
                 elif e == '%':
                     res = a % b
-                pointer.stack.append(res)
+                p.stack.append(res)
             elif e == '\\':
-                a = pointer.stack.pop()
-                b = pointer.stack.pop()
-                pointer.stack.append(a)
-                pointer.stack.append(b)
+                a = p.stack.pop()
+                try:
+                    b = p.stack.pop()
+                except:
+                    b = 0
+                p.stack.append(a)
+                p.stack.append(b)
             elif e == ':':
-                a = pointer.stack.pop()
-                pointer.stack.append(a)
-                pointer.stack.append(a)
+                a = p.stack.pop()
+                p.stack.append(a)
+                p.stack.append(a)
             elif e == ',':
-                a = pointer.stack.pop().decode('ASCII')
+                a = chr(p.stack.pop())
                 result += a
             elif e == '.':
-                a = pointer.stack.pop()
+                a = p.stack.pop()
                 result += str(a)
             elif e == '$':
-                pointer.stack.pop()
+                p.stack.pop()
+            elif e == '&':
+                p.stack.append(int(input('Введите число: ')))
+            elif e == '#':
+                p.step()
+            elif e == '~':
+                p.stack.append(ord(input('Введите символ: ')[0]))
             elif e == '!':
-                if pointer.stack.pop() == 0:
-                    pointer.stack.append(1)
+                if p.stack.pop() == 0:
+                    p.stack.append(1)
                 else:
-                    pointer.stack.append(0)
+                    p.stack.append(0)
             elif e == '`':
-                a = pointer.stack.pop()
-                b = pointer.stack.pop()
+                a = p.stack.pop()
+                b = p.stack.pop()
                 if b > a:
-                    pointer.stack.append(1)
+                    p.stack.append(1)
                 else:
-                    pointer.stack.append(0)
+                    p.stack.append(0)
             elif e == '\"':
-                pointer.step()
-                e = pointer.get()
+                p.step()
+                e = p.get()
                 while e != '\"':
-                    pointer.stack.append(e.encode('ASCII'))
-                    pointer.step()
-                    e = pointer.get()
+                    p.stack.append(e.encode('ASCII'))
+                    p.step()
+                    e = p.get()
             elif e == '@':
                 break
-            pointer.step()
-            if e == '#':
-                pointer.step()
+            p.step()
         return result
