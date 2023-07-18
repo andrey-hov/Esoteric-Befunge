@@ -3,13 +3,13 @@ import sys
 
 
 class Pointer:
-    def __init__(self, file_name):
+    def __init__(self, text):
         self.A = []
         self.x = 0
         self.y = 0
         self.vector = '>'
         self.stack = []
-        self.init_field(file_name)
+        self.init_field(text)
 
     def get(self):
         return self.A[self.x][self.y]
@@ -26,9 +26,7 @@ class Pointer:
         if len(self.A[0]) <= self.x < 0 or len(self.A) <= self.y < 0:
             raise Exception('Выход за пределы поля')
 
-    def init_field(self, file_name):
-        with open(file_name, 'r') as f:
-            text = f.read().split("\n")
+    def init_field(self, text):
         row = len(text)
         column = 0
 
@@ -58,7 +56,14 @@ class Interpreter:
     """
 
     def __init__(self, file_name):
-        self.pointer = Pointer(file_name)
+        try:
+            with open(file_name, 'r') as f:
+                text = f.read().split("\n")
+        except FileNotFoundError:
+            raise FileNotFoundError
+        except:
+            raise Exception('Ошибка!')
+        self.pointer = Pointer(text)
 
     def start(self):
         result = ''

@@ -9,6 +9,11 @@ class MyTestCase(unittest.TestCase):
     def test_HelloWorld(self):
         self.assertEqual(Befunge.Interpreter('programs/Hello_world.txt').start(), 'Hello World!')
 
+    def test_random_number(self):
+        self.assertIn(Befunge.Interpreter('programs/random_number.txt').start(), ['0', '1', '2', '3', '4', '5',
+                                                                                  '6', '7', '8', '9'])
+
+
 
 if __name__ == '__main__':
     unittest.main()
