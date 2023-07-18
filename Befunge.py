@@ -22,7 +22,7 @@ class Pointer:
             self.x -= 1
         elif self.vector == 'v':
             self.x += 1
-        if len(self.A[0]) <= self.x < 0 or len(self.A) <= self.y < 0:
+        if len(self.A) <= self.x or self.x < 0 or len(self.A[0]) <= self.y or self.y < 0:
             raise Exception('Выход за пределы поля')
 
     def init_field(self, text):
@@ -58,10 +58,8 @@ class Interpreter:
         try:
             with open(file_name, 'r') as f:
                 text = f.read().split("\n")
-        except FileNotFoundError:
-            raise FileNotFoundError
-        except:
-            raise Exception('Ошибка!')
+        except Exception as e:
+            raise e
         self.pointer = Pointer(text)
 
     def start(self):

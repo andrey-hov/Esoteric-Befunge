@@ -13,6 +13,10 @@ class MyTestCase(unittest.TestCase):
         self.assertIn(Befunge.Interpreter('programs/random_number.txt').start(), ['0', '1', '2', '3', '4', '5',
                                                                                   '6', '7', '8', '9'])
 
+    def test_pointer(self):
+        self.assertEqual(Befunge.Pointer('<').get(), '<')
+
+
 
 
 if __name__ == '__main__':

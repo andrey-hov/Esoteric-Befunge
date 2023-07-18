@@ -1,4 +1,3 @@
-import sys
 import Befunge
 import argparse
 

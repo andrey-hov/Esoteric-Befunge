@@ -9,15 +9,14 @@
 
 ## Использование
 
-- Для запуска программы запустить `main`.
-- Ввести в консоль путь до исполняемого файла (ниже приведены примеры файлов)
-- Для выхода ввести `Exit` или прервать выполнение программы.
+- Для запуска вести в консоли `python main.py file_path`, 
+где `file_path` - путь до исполняемого файла (ниже приведены примеры файлов)
 
 ## Программы
 
-1. `programs/Fibonachi.txt` - Выводит первые 14 чисел Фибоначчи
-2. `programs/Hello_world.txt` - печатает 'Hello World!'
-3. `programs/random.txt` - выводит рандомные числа
-4. `programs/input.txt` - выводит введенное число
+1. `python main.py programs/Fibonachi.txt` - Выводит первые 14 чисел Фибоначчи
+2. `python main.py programs/Hello_world.txt` - печатает 'Hello World!'
+3. `python main.py programs/random.txt` - выводит рандомные числа
+4. `python main.py programs/input.txt` - выводит введенное число
 
 ## Автор: Ховрычев Андрей
