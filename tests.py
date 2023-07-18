@@ -17,7 +17,5 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(Befunge.Pointer('<').get(), '<')
 
 
-
-
 if __name__ == '__main__':
     unittest.main()
