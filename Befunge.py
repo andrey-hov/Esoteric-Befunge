@@ -2,6 +2,12 @@ import random
 
 
 class Pointer:
+    """
+    Поинтер
+    Принимает массив строк (поле)
+    Отвечает за хождение по полю
+    """
+
     def __init__(self, text):
         self.A = []
         self.x = 0

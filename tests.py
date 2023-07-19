@@ -16,6 +16,12 @@ class MyTestCase(unittest.TestCase):
     def test_pointer(self):
         self.assertEqual(Befunge.Pointer('<').get(), '<')
 
+    def test_step(self):
+        interpreter = Befunge.Interpreter('programs/Hello_world.txt')
+        interpreter.pointer.step()
+        self.assertEqual(interpreter.pointer.x, 0)
+        self.assertEqual(interpreter.pointer.y, 1)
+
 
 if __name__ == '__main__':
     unittest.main()
