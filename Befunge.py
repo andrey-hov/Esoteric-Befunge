@@ -1,4 +1,5 @@
 import random
+import sys
 
 
 class Pointer:
@@ -9,7 +10,7 @@ class Pointer:
     """
 
     def __init__(self, text):
-        self.A = []
+        self.field = []
         self.x = 0
         self.y = 0
         self.vector = '>'
@@ -17,7 +18,7 @@ class Pointer:
         self.init_field(text)
 
     def get(self):
-        return self.A[self.x][self.y]
+        return self.field[self.x][self.y]
 
     def step(self):
         if self.vector == '>':
@@ -28,7 +29,7 @@ class Pointer:
             self.x -= 1
         elif self.vector == 'v':
             self.x += 1
-        if len(self.A) <= self.x or self.x < 0 or len(self.A[0]) <= self.y or self.y < 0:
+        if len(self.field) <= self.x or self.x < 0 or len(self.field[0]) <= self.y or self.y < 0:
             raise Exception('Выход за пределы поля')
 
     def init_field(self, text):
@@ -39,16 +40,16 @@ class Pointer:
             if len(line) > column:
                 column = len(line)
 
-        self.A = [' '] * row
+        self.field = [' '] * row
         for i in range(row):
-            self.A[i] = [' '] * column
+            self.field[i] = [' '] * column
 
         for i in range(len(text)):
             for j in range(len(text[i])):
-                self.A[i][j] = text[i][j]
+                self.field[i][j] = text[i][j]
 
     def field_print(self):
-        for row in self.A:
+        for row in self.field:
             for elem in row:
                 print(elem, end='')
             print()
@@ -64,116 +65,117 @@ class Interpreter:
         try:
             with open(file_name, 'r') as f:
                 text = f.read().split("\n")
-        except Exception as e:
-            raise e
+        except:
+            sys.exit("Ошибка открытия файла")
         self.pointer = Pointer(text)
+
+    def arithmetic(self, e):
+        b = self.pointer.stack.pop()
+        a = self.pointer.stack.pop()
+        if e == '+':
+            return a + b
+        elif e == '-':
+            return a - b
+        elif e == '*':
+            return a * b
+        elif e == '/':
+            if b == 0:
+                return 0
+            else:
+                return a // b
+        elif e == '%':
+            return a % b
+
+    def choice_vector(self, e):
+        flag = self.pointer.stack.pop()
+        if flag == 0:
+            if e == '|':
+                return 'v'
+            else:
+                return '>'
+        else:
+            if e == '|':
+                return '^'
+            else:
+                return '<'
 
     def start(self):
         result = ''
-        p = self.pointer
+        point = self.pointer
         while True:
-            e = p.get()
-            if e == '>':
-                p.vector = '>'
-            elif e == '<':
-                p.vector = '<'
-            elif e == '^':
-                p.vector = '^'
-            elif e == 'v':
-                p.vector = 'v'
+            e = point.get()
+            if e in ['>', '<', '^', 'v']:
+                point.vector = e
             elif e.isdigit():
-                p.stack.append(int(e))
+                point.stack.append(int(e))
             elif e == 'p':
-                x = p.stack.pop()
-                y = p.stack.pop()
-                value = p.stack.pop()
-                p.A[x][y] = chr(value)
+                x = point.stack.pop()
+                y = point.stack.pop()
+                value = point.stack.pop()
+                point.field[x][y] = chr(value)
             elif e == 'g':
-                x = p.stack.pop()
-                y = p.stack.pop()
-                value = p.A[x][y]
-                p.stack.append(ord(value))
+                x = point.stack.pop()
+                y = point.stack.pop()
+                value = point.field[x][y]
+                point.stack.append(ord(value))
             elif e == '|':
-                flag = p.stack.pop()
-                if flag == 0:
-                    p.vector = 'v'
-                else:
-                    p.vector = '^'
+                point.vector = self.choice_vector(e)
             elif e == '_':
-                flag = p.stack.pop()
-                if flag == 0:
-                    p.vector = '>'
-                else:
-                    p.vector = '<'
+                point.vector = self.choice_vector(e)
             elif e == '?':
-                p.vector = random.choice(['^', 'v', '>', '<'])
+                point.vector = random.choice(['^', 'v', '>', '<'])
             elif e in ['+', '-', '*', '/', '%']:
-                b = p.stack.pop()
-                a = p.stack.pop()
-                if e == '+':
-                    res = a + b
-                elif e == '-':
-                    res = a - b
-                elif e == '*':
-                    res = a * b
-                elif e == '/':
-                    if b == 0:
-                        res = 0
-                    else:
-                        res = a // b
-                elif e == '%':
-                    res = a % b
-                p.stack.append(res)
+                point.stack.append(self.arithmetic(e))
             elif e == '\\':
-                a = p.stack.pop()
+                a = point.stack.pop()
                 try:
-                    b = p.stack.pop()
+                    b = point.stack.pop()
                 except:
                     b = 0
-                p.stack.append(a)
-                p.stack.append(b)
+                point.stack.append(a)
+                point.stack.append(b)
             elif e == ':':
-                a = p.stack.pop()
-                p.stack.append(a)
-                p.stack.append(a)
+                a = point.stack.pop()
+                point.stack.append(a)
+                point.stack.append(a)
             elif e == ',':
-                a = p.stack.pop().decode('ASCII')
+                a = point.stack.pop().decode('ASCII')
                 result += a
             elif e == '.':
-                a = p.stack.pop()
+                a = point.stack.pop()
                 result += str(a)
             elif e == '$':
-                p.stack.pop()
+                point.stack.pop()
             elif e == '&':
                 a = input('Введите число: ')
                 if a.isdigit():
-                    p.stack.append(int(input('Введите число: ')))
+                    point.stack.append(int(a))
                 else:
                     raise Exception('Это не число')
             elif e == '#':
-                p.step()
+                point.step()
             elif e == '~':
-                p.stack.append(ord(input('Введите символ: ')[0]))
+                point.stack.append(ord(input('Введите символ: ')[0]))
             elif e == '!':
-                if p.stack.pop() == 0:
-                    p.stack.append(1)
+                if point.stack.pop() == 0:
+                    point.stack.append(1)
                 else:
-                    p.stack.append(0)
+                    point.stack.append(0)
             elif e == '`':
-                a = p.stack.pop()
-                b = p.stack.pop()
+                a = point.stack.pop()
+                b = point.stack.pop()
                 if b > a:
-                    p.stack.append(1)
+                    point.stack.append(1)
                 else:
-                    p.stack.append(0)
+                    point.stack.append(0)
             elif e == '\"':
-                p.step()
-                e = p.get()
+                point.step()
+                e = point.get()
                 while e != '\"':
-                    p.stack.append(e.encode('ASCII'))
-                    p.step()
-                    e = p.get()
+                    point.stack.append(e.encode('ASCII'))
+                    point.step()
+                    e = point.get()
             elif e == '@':
                 break
-            p.step()
+            point.step()
         return result

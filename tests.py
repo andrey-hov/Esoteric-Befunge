@@ -22,6 +22,18 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(interpreter.pointer.x, 0)
         self.assertEqual(interpreter.pointer.y, 1)
 
+    def test_arithmetic(self):
+        interpreter = Befunge.Interpreter('programs/Hello_world.txt')
+        interpreter.pointer.stack.append(5)
+        interpreter.pointer.stack.append(7)
+        self.assertEqual(interpreter.arithmetic('+'), 12)
+
+    def test_choice_vector(self):
+        interpreter = Befunge.Interpreter('programs/Hello_world.txt')
+        interpreter.pointer.stack.append(1)
+        self.assertEqual(interpreter.choice_vector('_'), '<')
+
+
 
 if __name__ == '__main__':
     unittest.main()
