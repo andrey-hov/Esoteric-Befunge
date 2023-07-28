@@ -69,113 +69,186 @@ class Interpreter:
             sys.exit("Ошибка открытия файла")
         self.pointer = Pointer(text)
 
-    def arithmetic(self, e):
+    def add(self):
         b = self.pointer.stack.pop()
         a = self.pointer.stack.pop()
-        if e == '+':
-            return a + b
-        elif e == '-':
-            return a - b
-        elif e == '*':
-            return a * b
-        elif e == '/':
-            if b == 0:
-                return 0
-            else:
-                return a // b
-        elif e == '%':
-            return a % b
+        return a + b
 
-    def choice_vector(self, e):
+    def sub(self):
+        b = self.pointer.stack.pop()
+        a = self.pointer.stack.pop()
+        return a - b
+
+    def mul(self):
+        b = self.pointer.stack.pop()
+        a = self.pointer.stack.pop()
+        return a * b
+
+    def floordiv(self):
+        b = self.pointer.stack.pop()
+        a = self.pointer.stack.pop()
+        if b == 0:
+            return 0
+        else:
+            return a // b
+
+    def mod(self):
+        b = self.pointer.stack.pop()
+        a = self.pointer.stack.pop()
+        return a % b
+
+    def random(self):
+        self.pointer.vector = random.choice(['^', 'v', '>', '<'])
+
+    def right(self):
+        self.pointer.vector = '>'
+
+    def left(self):
+        self.pointer.vector = '<'
+
+    def up(self):
+        self.pointer.vector = '^'
+
+    def down(self):
+        self.pointer.vector = 'v'
+
+    def delete(self):
+        self.pointer.stack.pop()
+
+    def print_number(self):
+        a = self.pointer.stack.pop()
+        print(str(a), end='')
+
+    def print_symbol(self):
+        a = self.pointer.stack.pop().decode('ASCII')
+        print(a, end='')
+
+    def greater(self):
+        a = self.pointer.stack.pop()
+        b = self.pointer.stack.pop()
+        if b > a:
+            self.pointer.stack.append(1)
+        else:
+            self.pointer.stack.append(0)
+
+    def swap(self):
+        a = self.pointer.stack.pop()
+        try:
+            b = self.pointer.stack.pop()
+        except:
+            b = 0
+        self.pointer.stack.append(a)
+        self.pointer.stack.append(b)
+
+    def put(self):
+        x = self.pointer.stack.pop()
+        y = self.pointer.stack.pop()
+        value = self.pointer.stack.pop()
+        self.pointer.field[x][y] = chr(value)
+
+    def get(self):
+        x = self.pointer.stack.pop()
+        y = self.pointer.stack.pop()
+        value = self.pointer.field[x][y]
+        self.pointer.stack.append(ord(value))
+
+    def step_up_or_down(self):
         flag = self.pointer.stack.pop()
         if flag == 0:
-            if e == '|':
-                return 'v'
-            else:
-                return '>'
+            self.pointer.vector = 'v'
         else:
-            if e == '|':
-                return '^'
-            else:
-                return '<'
+            self.pointer.vector = '^'
+
+    def step_left_or_right(self):
+        flag = self.pointer.stack.pop()
+        if flag == 0:
+            self.pointer.vector = '>'
+        else:
+            self.pointer.vector = '<'
+
+    def put_symbol(self):
+        self.pointer.stack.append(ord(input('Введите символ: ')[0]))
+
+    def negative(self):
+        if self.pointer.stack.pop() == 0:
+            self.pointer.stack.append(1)
+        else:
+            self.pointer.stack.append(0)
+
+    def next(self):
+        self.pointer.step()
+
+    def input_number(self):
+        a = input('Введите число: ')
+        if a.isdigit():
+            self.pointer.stack.append(int(a))
+        else:
+            sys.exit('Это не число!')
+
+    def string(self):
+        self.pointer.step()
+        e = self.pointer.get()
+        while e != '\"':
+            self.pointer.stack.append(e.encode('ASCII'))
+            self.pointer.step()
+            e = self.pointer.get()
+
+    def double(self):
+        a = self.pointer.stack.pop()
+        self.pointer.stack.append(a)
+        self.pointer.stack.append(a)
+
+    def clear_stack(self):
+        self.pointer.stack.clear()
+
+    def jump_forward(self):
+        a = self.pointer.stack.pop()
+        for i in range(a):
+            self.pointer.step()
+
+    methods = {'+': add,
+               '-': sub,
+               '/': floordiv,
+               '*': mul,
+               '%': mod,
+               '?': random,
+               '>': right,
+               '<': left,
+               '^': up,
+               'v': down,
+               '.': print_number,
+               '\\': swap,
+               '$': delete,
+               '`': greater,
+               'p': put,
+               'g': get,
+               '|': step_up_or_down,
+               '_': step_left_or_right,
+               '!': negative,
+               '~': put_symbol,
+               '#': next,
+               ',': print_symbol,
+               '&': input_number,
+               '\"': string,
+               ':': double,
+               '(': double,
+               ')': double,
+               ';': double,
+               '=': double,
+               '[': double,
+               ']': double,
+               'h': double,
+               'j': jump_forward,
+               'n': clear_stack,
+               '\'': double}
 
     def start(self):
-        result = ''
-        point = self.pointer
         while True:
-            e = point.get()
-            if e in ['>', '<', '^', 'v']:
-                point.vector = e
-            elif e.isdigit():
-                point.stack.append(int(e))
-            elif e == 'p':
-                x = point.stack.pop()
-                y = point.stack.pop()
-                value = point.stack.pop()
-                point.field[x][y] = chr(value)
-            elif e == 'g':
-                x = point.stack.pop()
-                y = point.stack.pop()
-                value = point.field[x][y]
-                point.stack.append(ord(value))
-            elif e == '|':
-                point.vector = self.choice_vector(e)
-            elif e == '_':
-                point.vector = self.choice_vector(e)
-            elif e == '?':
-                point.vector = random.choice(['^', 'v', '>', '<'])
-            elif e in ['+', '-', '*', '/', '%']:
-                point.stack.append(self.arithmetic(e))
-            elif e == '\\':
-                a = point.stack.pop()
-                try:
-                    b = point.stack.pop()
-                except:
-                    b = 0
-                point.stack.append(a)
-                point.stack.append(b)
-            elif e == ':':
-                a = point.stack.pop()
-                point.stack.append(a)
-                point.stack.append(a)
-            elif e == ',':
-                a = point.stack.pop().decode('ASCII')
-                result += a
-            elif e == '.':
-                a = point.stack.pop()
-                result += str(a)
-            elif e == '$':
-                point.stack.pop()
-            elif e == '&':
-                a = input('Введите число: ')
-                if a.isdigit():
-                    point.stack.append(int(a))
-                else:
-                    raise Exception('Это не число')
-            elif e == '#':
-                point.step()
-            elif e == '~':
-                point.stack.append(ord(input('Введите символ: ')[0]))
-            elif e == '!':
-                if point.stack.pop() == 0:
-                    point.stack.append(1)
-                else:
-                    point.stack.append(0)
-            elif e == '`':
-                a = point.stack.pop()
-                b = point.stack.pop()
-                if b > a:
-                    point.stack.append(1)
-                else:
-                    point.stack.append(0)
-            elif e == '\"':
-                point.step()
-                e = point.get()
-                while e != '\"':
-                    point.stack.append(e.encode('ASCII'))
-                    point.step()
-                    e = point.get()
-            elif e == '@':
+            e = self.pointer.get()
+            if e == '@':
                 break
-            point.step()
-        return result
+            if e.isdigit():
+                self.pointer.stack.append(int(e))
+            else:
+                self.methods[e]()
+            self.pointer.step()

@@ -16,7 +16,10 @@
 
 1. `python main.py programs/Fibonachi.txt` - Выводит первые 14 чисел Фибоначчи
 2. `python main.py programs/Hello_world.txt` - печатает 'Hello World!'
-3. `python main.py programs/random.txt` - выводит рандомные числа
+3. `python main.py programs/random_number.txt` - выводит рандомные числа
 4. `python main.py programs/input.txt` - выводит введенное число
+5. `python main.py programs/square.txt` - возводит введенное число в квадрат
+6. `python main.py programs/summ.txt` - складывает два введенных числа
+7. `python main.py programs/factorial.txt` - выводит факторил введенного числа
 
 ## Автор: Ховрычев Андрей
