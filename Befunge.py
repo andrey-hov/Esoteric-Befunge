@@ -30,7 +30,7 @@ class Pointer:
         elif self.vector == 'v':
             self.x += 1
         if len(self.field) <= self.x or self.x < 0 or len(self.field[0]) <= self.y or self.y < 0:
-            raise Exception('Выход за пределы поля')
+            sys.exit('Выход за пределы поля')
 
     def init_field(self, text):
         row = len(text)
@@ -242,7 +242,7 @@ class Interpreter:
                'n': clear_stack,
                '\'': double}
 
-    def start(self):
+    def start_go(self):
         while True:
             e = self.pointer.get()
             if e == '@':
@@ -252,3 +252,24 @@ class Interpreter:
             else:
                 self.methods[e]()
             self.pointer.step()
+
+    def start_steps(self):
+        flag = 0
+        while flag == 0:
+            n = int(input('Введите количество шагов: '))
+            for i in range(n):
+                e = self.pointer.get()
+                if e == '@':
+                    flag = 1
+                    break
+                if e.isdigit():
+                    self.pointer.stack.append(int(e))
+                else:
+                    self.methods[e]()
+                self.pointer.step()
+
+    def start(self, go_or_steps):
+        if go_or_steps == 'go':
+            self.start_go()
+        elif go_or_steps == 'steps':
+            self.start_steps()
