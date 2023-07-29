@@ -80,6 +80,18 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(interpreter.pointer.stack.pop(), 1)
         self.assertEqual(interpreter.pointer.stack.pop(), 1)
 
+    def test_step_up_or_down(self):
+        interpreter = Befunge.Interpreter('programs/Hello_world.txt')
+        interpreter.pointer.stack.append(0)
+        instructions.step_up_or_down(interpreter)
+        self.assertEqual(interpreter.pointer.vector, 'v')
+
+    def test_step_left_or_right(self):
+        interpreter = Befunge.Interpreter('programs/Hello_world.txt')
+        interpreter.pointer.stack.append(0)
+        instructions.step_left_or_right(interpreter)
+        self.assertEqual(interpreter.pointer.vector, '>')
+
 
 if __name__ == '__main__':
     unittest.main()
