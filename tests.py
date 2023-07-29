@@ -5,18 +5,6 @@ import Pointer
 
 
 class MyTestCase(unittest.TestCase):
-    # def test_Fibonachi(self):
-    #     self.assertEqual(Befunge.Interpreter('programs/Fibonachi.txt').start('go'),
-    #                      '0 1 1 2 3 5 8 13 21 34 55 89 144 233 ')
-    #
-    # def test_HelloWorld(self):
-    #     self.assertEqual(Befunge.Interpreter('programs/Hello_world.txt').start('go'),
-    #                      'Hello World!')
-    #
-    # def test_random_number(self):
-    #     self.assertIn(Befunge.Interpreter('programs/random_number.txt').start('go'),
-    #                   ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
-
     def test_pointer(self):
         self.assertEqual(Pointer.Pointer('<').get(), '<')
 
@@ -46,6 +34,20 @@ class MyTestCase(unittest.TestCase):
         interpreter.pointer.stack.append(7)
         instructions.mul(interpreter)
         self.assertEqual(interpreter.pointer.stack.pop(), 35)
+
+    def test_floordiv(self):
+        interpreter = Befunge.Interpreter('programs/Hello_world.txt')
+        interpreter.pointer.stack.append(5)
+        interpreter.pointer.stack.append(7)
+        instructions.floordiv(interpreter)
+        self.assertEqual(interpreter.pointer.stack.pop(), 0)
+
+    def test_mod(self):
+        interpreter = Befunge.Interpreter('programs/Hello_world.txt')
+        interpreter.pointer.stack.append(5)
+        interpreter.pointer.stack.append(7)
+        instructions.mod(interpreter)
+        self.assertEqual(interpreter.pointer.stack.pop(), 5)
 
     def test_random(self):
         interpreter = Befunge.Interpreter('programs/Hello_world.txt')
@@ -91,6 +93,42 @@ class MyTestCase(unittest.TestCase):
         interpreter.pointer.stack.append(0)
         instructions.step_left_or_right(interpreter)
         self.assertEqual(interpreter.pointer.vector, '>')
+
+    def test_swap(self):
+        interpreter = Befunge.Interpreter('programs/Hello_world.txt')
+        interpreter.pointer.stack.append(0)
+        interpreter.pointer.stack.append(50)
+        instructions.swap(interpreter)
+        self.assertEqual(interpreter.pointer.stack.pop(), 0)
+        self.assertEqual(interpreter.pointer.stack.pop(), 50)
+
+    def test_delete(self):
+        interpreter = Befunge.Interpreter('programs/Hello_world.txt')
+        interpreter.pointer.stack.append(1)
+        interpreter.pointer.stack.append(2)
+        interpreter.pointer.stack.append(555)
+        instructions.delete(interpreter)
+        self.assertEqual(interpreter.pointer.stack.pop(), 2)
+
+    def test_right(self):
+        interpreter = Befunge.Interpreter('programs/Hello_world.txt')
+        instructions.right(interpreter)
+        self.assertEqual(interpreter.pointer.vector, '>')
+
+    def test_left(self):
+        interpreter = Befunge.Interpreter('programs/Hello_world.txt')
+        instructions.left(interpreter)
+        self.assertEqual(interpreter.pointer.vector, '<')
+
+    def test_up(self):
+        interpreter = Befunge.Interpreter('programs/Hello_world.txt')
+        instructions.up(interpreter)
+        self.assertEqual(interpreter.pointer.vector, '^')
+
+    def test_down(self):
+        interpreter = Befunge.Interpreter('programs/Hello_world.txt')
+        instructions.down(interpreter)
+        self.assertEqual(interpreter.pointer.vector, 'v')
 
 
 if __name__ == '__main__':
