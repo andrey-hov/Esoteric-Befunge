@@ -5,37 +5,37 @@ import sys
 def add(interpreter):
     b = interpreter.pointer.stack.pop()
     a = interpreter.pointer.stack.pop()
-    return a + b
+    interpreter.pointer.stack.append(a + b)
 
 
 def sub(interpreter):
     b = interpreter.pointer.stack.pop()
     a = interpreter.pointer.stack.pop()
-    return a - b
+    interpreter.pointer.stack.append(a - b)
 
 
 def mul(interpreter):
     b = interpreter.pointer.stack.pop()
     a = interpreter.pointer.stack.pop()
-    return a * b
+    interpreter.pointer.stack.append(a * b)
 
 
 def floordiv(interpreter):
     b = interpreter.pointer.stack.pop()
     a = interpreter.pointer.stack.pop()
     if b == 0:
-        return 0
+        interpreter.pointer.stack.append(0)
     else:
-        return a // b
+        interpreter.pointer.stack.append(a // b)
 
 
 def mod(interpreter):
     b = interpreter.pointer.stack.pop()
     a = interpreter.pointer.stack.pop()
-    return a % b
+    interpreter.pointer.stack.append(a % b)
 
 
-def random(interpreter):
+def random_vector(interpreter):
     interpreter.pointer.vector = random.choice(['^', 'v', '>', '<'])
 
 
