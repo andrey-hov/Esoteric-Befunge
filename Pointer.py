@@ -1,3 +1,6 @@
+import sys
+
+
 class Pointer:
     """
     Поинтер

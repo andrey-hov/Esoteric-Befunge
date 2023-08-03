@@ -4,7 +4,7 @@ import instructions
 import Pointer
 
 
-class MyTestCase(unittest.TestCase):
+class InterpreterTest(unittest.TestCase):
     def test_pointer(self):
         self.assertEqual(Pointer.Pointer('<').get(), '<')
 
@@ -129,6 +129,11 @@ class MyTestCase(unittest.TestCase):
         interpreter = Befunge.Interpreter('programs/Hello_world.txt')
         instructions.down(interpreter)
         self.assertEqual(interpreter.pointer.vector, 'v')
+
+    def test_text(self):
+        interpreter = Befunge.Interpreter('programs/Hello_world.txt')
+        interpreter.start('go')
+        self.assertEqual(interpreter.text[1][0], '@')
 
 
 if __name__ == '__main__':

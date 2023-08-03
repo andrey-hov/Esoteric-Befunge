@@ -12,14 +12,16 @@ class Interpreter:
     def __init__(self, file_name):
         try:
             with open(file_name, 'r') as f:
-                text = f.read().split("\n")
+                self.text = f.read().split("\n")
         except:
             sys.exit("Ошибка открытия файла")
-        self.pointer = Pointer.Pointer(text)
+        self.pointer = Pointer.Pointer(self.text)
 
     def start_go(self):
         while True:
             e = self.pointer.get()
+            if e not in instructions.methods.keys():
+                sys.exit(f'Несуществующий символ в программе: {e}')
             if e == '@':
                 break
             if e.isdigit():
@@ -35,6 +37,8 @@ class Interpreter:
             n = int(input('Введите количество шагов: '))
             for i in range(n):
                 e = self.pointer.get()
+                if e not in instructions.methods.keys():
+                    sys.exit(f'Несуществующий символ в программе: {e}')
                 if e == '@':
                     flag = 1
                     break
