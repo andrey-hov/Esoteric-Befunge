@@ -132,7 +132,6 @@ class InterpreterTest(unittest.TestCase):
 
     def test_text(self):
         interpreter = Befunge.Interpreter('programs/Hello_world.txt')
-        interpreter.start('go')
         self.assertEqual(interpreter.text[1][0], '@')
 
 

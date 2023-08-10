@@ -28,7 +28,8 @@ class Pointer:
             self.x -= 1
         elif self.vector == 'v':
             self.x += 1
-        if len(self.field) <= self.x or self.x < 0 or len(self.field[0]) <= self.y or self.y < 0:
+        if (len(self.field) <= self.x or self.x < 0 or
+                len(self.field[0]) <= self.y or self.y < 0):
             sys.exit('Выход за пределы поля')
 
     def init_field(self, text):

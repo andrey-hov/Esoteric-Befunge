@@ -166,12 +166,7 @@ def jump_forward(interpreter):
         interpreter.pointer.step()
 
 
-def skip(interpreter):
-    pass
-
-
-methods = {' ': skip,
-           '+': add,
+methods = {'+': add,
            '-': sub,
            '/': floordiv,
            '*': mul,

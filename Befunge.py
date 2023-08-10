@@ -20,12 +20,16 @@ class Interpreter:
     def start_go(self):
         while True:
             e = self.pointer.get()
-            if e not in instructions.methods.keys():
-                sys.exit(f'Несуществующий символ в программе: {e}')
             if e == '@':
+                flag = 1
                 break
+            if e == ' ':
+                self.pointer.step()
+                continue
             if e.isdigit():
                 self.pointer.stack.append(int(e))
+            elif e not in instructions.methods.keys():
+                sys.exit(f'Несуществующий символ в программе: {e}')
             else:
                 instructions.methods[e](self)
             self.pointer.step()
@@ -37,13 +41,16 @@ class Interpreter:
             n = int(input('Введите количество шагов: '))
             for i in range(n):
                 e = self.pointer.get()
-                if e not in instructions.methods.keys():
-                    sys.exit(f'Несуществующий символ в программе: {e}')
                 if e == '@':
                     flag = 1
                     break
+                if e == ' ':
+                    self.pointer.step()
+                    continue
                 if e.isdigit():
                     self.pointer.stack.append(int(e))
+                elif e not in instructions.methods.keys():
+                    sys.exit(f'Несуществующий символ в программе: {e}')
                 else:
                     instructions.methods[e](self)
                 self.pointer.step()
