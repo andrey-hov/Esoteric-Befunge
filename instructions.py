@@ -82,7 +82,7 @@ def swap(interpreter):
     a = interpreter.pointer.stack.pop()
     try:
         b = interpreter.pointer.stack.pop()
-    except:
+    except IndexError:
         b = 0
     interpreter.pointer.stack.append(a)
     interpreter.pointer.stack.append(b)
@@ -129,7 +129,7 @@ def negative(interpreter):
         interpreter.pointer.stack.append(0)
 
 
-def next(interpreter):
+def next_point(interpreter):
     interpreter.pointer.step()
 
 
@@ -191,7 +191,7 @@ methods = {' ': skip,
            '_': step_left_or_right,
            '!': negative,
            '~': put_symbol,
-           '#': next,
+           '#': next_point,
            ',': print_symbol,
            '&': input_number,
            '\"': string,

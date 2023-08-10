@@ -13,7 +13,7 @@ class Interpreter:
         try:
             with open(file_name, 'r') as f:
                 self.text = f.read().split("\n")
-        except:
+        except FileNotFoundError:
             sys.exit("Ошибка открытия файла")
         self.pointer = Pointer.Pointer(self.text)
 
